@@ -107,6 +107,14 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\class\uDownloader.pas"/>
+        <DCCReference Include="src\class\uDatabase.pas"/>
+        <DCCReference Include="src\class\uLogDownloadPersistence.pas"/>
+        <DCCReference Include="src\class\uBasePersistence.pas"/>
+        <DCCReference Include="src\class\uLogDownload.pas"/>
+        <DCCReference Include="src\form\uFrmLogDownload.pas">
+            <Form>frmLogDownload</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

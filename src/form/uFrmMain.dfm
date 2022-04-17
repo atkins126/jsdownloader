@@ -1,11 +1,9 @@
 object frmMain: TfrmMain
   Left = 0
   Top = 0
-  Caption = 
-    'JSDownloader | Download de arquivos com Delphi + Multithread + S' +
-    'QLite'
+  Caption = 'JSDownloader'
   ClientHeight = 299
-  ClientWidth = 589
+  ClientWidth = 514
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,53 +18,80 @@ object frmMain: TfrmMain
   PixelsPerInch = 96
   TextHeight = 17
   object lblDownloadLink: TLabel
-    Left = 192
-    Top = 8
+    Left = 198
+    Top = 57
     Width = 115
     Height = 17
     Caption = 'Link para download'
   end
   object edtDownloadLink: TEdit
-    Left = 192
-    Top = 23
+    Left = 79
+    Top = 80
     Width = 353
     Height = 25
     TabOrder = 0
   end
-  object pnlSidePanel: TPanel
+  object btnIniciarDownload: TButton
+    Left = 152
+    Top = 127
+    Width = 212
+    Height = 25
+    Caption = 'Iniciar Download'
+    TabOrder = 1
+    OnClick = btnIniciarDownloadClick
+  end
+  object btnExibirMensagem: TButton
+    Left = 152
+    Top = 167
+    Width = 212
+    Height = 25
+    Caption = 'Exibir mensagem'
+    TabOrder = 2
+    OnClick = btnExibirMensagemClick
+  end
+  object btnPararDownload: TButton
+    Left = 152
+    Top = 206
+    Width = 212
+    Height = 25
+    Caption = 'Parar download'
+    TabOrder = 3
+    OnClick = btnPararDownloadClick
+  end
+  object pnlTitle: TPanel
     Left = 0
     Top = 0
-    Width = 145
-    Height = 299
-    Align = alLeft
+    Width = 514
+    Height = 41
+    Align = alTop
     BevelOuter = bvNone
-    TabOrder = 1
-    object btnIniciarDownload: TButton
-      Left = 16
-      Top = 23
-      Width = 121
+    TabOrder = 4
+    object lblTitle: TLabel
+      Left = 0
+      Top = 8
+      Width = 514
       Height = 25
-      Caption = 'Iniciar Download'
-      TabOrder = 0
-      OnClick = btnIniciarDownloadClick
+      Alignment = taCenter
+      AutoSize = False
+      BiDiMode = bdRightToLeftNoAlign
+      Caption = 'Download de arquivos com Delphi + Multithread + SQLite'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -17
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      Font.Quality = fqClearType
+      ParentBiDiMode = False
+      ParentFont = False
     end
-    object btnExibirMensagem: TButton
-      Left = 16
-      Top = 63
-      Width = 121
-      Height = 25
-      Caption = 'Exibir mensagem'
-      TabOrder = 1
-      OnClick = btnExibirMensagemClick
-    end
-    object btnPararDownload: TButton
-      Left = 16
-      Top = 102
-      Width = 121
-      Height = 25
-      Caption = 'Parar download'
-      TabOrder = 2
-      OnClick = btnPararDownloadClick
-    end
+  end
+  object btnHistoricoDownloads: TButton
+    Left = 152
+    Top = 246
+    Width = 212
+    Height = 25
+    Caption = 'Exibir hist'#243'rico de downloads'
+    TabOrder = 5
+    OnClick = btnHistoricoDownloadsClick
   end
 end

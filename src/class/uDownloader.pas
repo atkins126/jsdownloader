@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
-  IdHTTP;
+  IdHTTP, uLogDownload;
 
 type
   TStatusDownload = record
@@ -34,12 +34,15 @@ type
     procedure IdHTTPWorkEnd(ASender: TObject; AWorkMode: TWorkMode);
   private
     FTamanhoArquivo: double;
+    FUrl: string;
     FObservers: TInterfaceList;
     FStatusDownload: TStatusDownload;
+    FLogDownload: TLogDownload;
     FIdHttp: TIdHTTP;
     FStopDownload: boolean;
     function ExtractUrlFileName(url: string): string;
     procedure initialize;
+    procedure sendLog;
   public
     constructor Create;
     destructor Destroy;
@@ -58,18 +61,15 @@ constructor TDownloader.Create;
 begin
   inherited;
   FObservers := TInterfaceList.Create;
-  // Cria e configura o objeto IdHttp
+  FLogDownload := TLogDownload.Create;
   FIdHttp := TIdHTTP.Create(nil);
-  FIdHttp.OnWorkBegin := IdHTTPWorkBegin;
-  FIdHttp.OnWork := IdHTTPWork;
-  FIdHttp.OnWorkEnd := IdHTTPWorkEnd;
 end;
 
 destructor TDownloader.Destroy;
 begin
-  FIdHttp.Disconnect;
   FIdHttp.Free;
   FObservers.Free;
+  FLogDownload.Free;
   inherited;
 end;
 
@@ -90,6 +90,10 @@ procedure TDownloader.notify;
 var
   observer: IInterface;
 begin
+  if FObservers.Count <= 0 then
+  begin
+    Exit;
+  end;
   for observer in FObservers do
   begin
     IObserver(observer).atualizaPrograsso(FStatusDownload);
@@ -104,7 +108,8 @@ begin
     Self.initialize;
     newFile := TFileStream.Create(filePath + Self.ExtractUrlFileName(url), fmCreate);
     try
-      FIdHttp.Get(url, newFile);
+      FUrl := url;
+      FIdHttp.Get(FUrl, newFile);
     finally
       newFile.Free;
     end;
@@ -129,6 +134,10 @@ begin
   FStatusDownload.DownloadConcluido := false;
   FStatusDownload.PercentualDownload := 0;
   FStopDownload := false;
+  FUrl := '';
+  FIdHttp.OnWorkBegin := IdHTTPWorkBegin;
+  FIdHttp.OnWork := IdHTTPWork;
+  FIdHttp.OnWorkEnd := IdHTTPWorkEnd;
 end;
 
 function TDownloader.ExtractUrlFileName(url: string): string;
@@ -144,10 +153,28 @@ begin
   FStopDownload := true;
 end;
 
+procedure TDownloader.sendLog;
+begin
+  FLogDownload.Url := FUrl;
+  FLogDownload.DataInicio := Now;
+  if FStatusDownload.DownloadConcluido then
+  begin
+    FLogDownload.DataFim := Now;
+    FLogDownload.update;
+  end
+  else
+  begin
+    FLogDownload.Codigo := 0;
+    FLogDownload.DataFim := 0;
+    FLogDownload.insert;
+  end;
+end;
+
 procedure TDownloader.IdHTTPWorkBegin(ASender: TObject; AWorkMode: TWorkMode; AWorkCountMax: Int64);
 begin
   FTamanhoArquivo := AWorkCountMax;
   FStatusDownload.DownloadIniciado := True;
+  Self.sendLog;
   Self.notify;
 end;
 
@@ -157,6 +184,9 @@ begin
   begin
     FIdHttp.Disconnect;
     FStatusDownload.DownloadIniciado := false;
+    FIdHttp.OnWorkBegin := nil;
+    FIdHttp.OnWork := nil;
+    FIdHttp.OnWorkEnd := nil;
   end
   else
   if (AWorkCount <> 0) and (FTamanhoArquivo <> 0) then
@@ -171,6 +201,7 @@ begin
   if FStatusDownload.PercentualDownload = 100 then
   begin
     FStatusDownload.DownloadConcluido := True;
+    Self.sendLog;
     Self.notify;
   end;
 end;

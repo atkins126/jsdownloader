@@ -10,17 +10,20 @@ uses
 type
   TfrmMain = class(TForm, IObserver)
     edtDownloadLink: TEdit;
-    pnlSidePanel: TPanel;
     lblDownloadLink: TLabel;
     btnIniciarDownload: TButton;
     btnExibirMensagem: TButton;
     btnPararDownload: TButton;
+    pnlTitle: TPanel;
+    lblTitle: TLabel;
+    btnHistoricoDownloads: TButton;
     procedure btnIniciarDownloadClick(Sender: TObject);
     procedure btnExibirMensagemClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnPararDownloadClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure btnHistoricoDownloadsClick(Sender: TObject);
   private
     FStatusDownload: TStatusDownload;
     FDownloader: TDownloader;
@@ -31,6 +34,7 @@ type
     procedure habilitaDesabilitaBotoes;
     procedure iniciarDownload;
     procedure pararDownload;
+    procedure inicializaStatusDownload;
   public
     procedure atualizaPrograsso(statusDownload: TStatusDownload);
   end;
@@ -40,22 +44,41 @@ var
 
 implementation
 
+uses uFrmLogDownload;
+
 {$R *.dfm}
 
 procedure TfrmMain.atualizaPrograsso(statusDownload: TStatusDownload);
 begin
-  FStatusDownload := statusDownload;
+  FStatusDownload.PercentualDownload := statusDownload.PercentualDownload;
+  FStatusDownload.DownloadIniciado := statusDownload.DownloadIniciado;
+  FStatusDownload.DownloadConcluido := statusDownload.DownloadConcluido;
+  FStatusDownload.OcorreuErro := statusDownload.OcorreuErro;
+  FStatusDownload.MensagemErro := statusDownload.MensagemErro;
   Self.habilitaDesabilitaBotoes;
-  if statusDownload.OcorreuErro then
+  if FStatusDownload.OcorreuErro then
   begin
     ShowMessage(FStatusDownload.MensagemErro);
+    Self.inicializaStatusDownload;
+    Self.habilitaDesabilitaBotoes;
     Exit;
   end;
-  if statusDownload.DownloadConcluido then
+  if FStatusDownload.DownloadConcluido then
   begin
     ShowMessage('Download concluído. Confira em: ' + ExtractFilePath(Application.ExeName));
+    Self.inicializaStatusDownload;
+    Self.habilitaDesabilitaBotoes;
     Exit;
   end;
+end;
+
+procedure TfrmMain.inicializaStatusDownload;
+begin
+  FStatusDownload.PercentualDownload := 0;
+  FStatusDownload.DownloadIniciado := false;
+  FStatusDownload.DownloadConcluido := false;
+  FStatusDownload.OcorreuErro := false;
+  FStatusDownload.MensagemErro := '';
 end;
 
 procedure TfrmMain.btnExibirMensagemClick(Sender: TObject);
@@ -63,12 +86,21 @@ begin
   ShowMessage('Progresso do download: ' + FStatusDownload.PercentualDownload.toString + '%');
 end;
 
+procedure TfrmMain.btnHistoricoDownloadsClick(Sender: TObject);
+begin
+  frmLogDownload := TfrmLogDownload.Create(Self);
+  try
+    frmLogDownload.CarregarLogs;
+    frmLogDownload.ShowModal;
+  finally
+    frmLogDownload.Free;
+    frmLogDownload := nil;
+  end;
+end;
+
 procedure TfrmMain.btnIniciarDownloadClick(Sender: TObject);
 begin
-  if FTask = nil then
-  begin
-    FTask := TTask.Create(Self.iniciarDownload);
-  end;
+  FTask := TTask.Create(Self.iniciarDownload);
   FTask.Start;
 end;
 
@@ -83,6 +115,11 @@ procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   if FDownloader <> nil then
   begin
+    if FStatusDownload.DownloadIniciado then
+    begin
+      Self.pararDownload;
+      Sleep(2000);
+    end;
     FDownloader.deleteObserver(Self);
     FDownloader.Free;
   end;
@@ -99,9 +136,7 @@ begin
   begin
     CanClose := False;
     Exit;
-  end;   
-  Self.pararDownload;
-  FTask.Wait(2000);
+  end;
 end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
@@ -111,7 +146,7 @@ end;
 
 procedure TfrmMain.habilitaDesabilitaBotoes;
 begin
-  if FStatusDownload.DownloadIniciado then
+  if FStatusDownload.DownloadIniciado and (not FStatusDownload.OcorreuErro) then
   begin
     btnIniciarDownload.Enabled := false;
     btnExibirMensagem.Enabled := true;
@@ -142,7 +177,7 @@ begin
     FDownloader.stopDownload;
   end;
 end;
-
+// Estes métodos foram declarados devido ao impelentar a interface IObserver
 function TfrmMain.GetActive: Boolean;
 begin
   Result := Self.Enabled;
