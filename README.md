@@ -7,7 +7,20 @@ Essa aplicação realiza o download de arquivos a partir de um link utilizando o
 # Estrutura do banco SQLite
 - Tabela - LOGDOWNLOAD
 - Campos 
-  - codigo - number(22,0) not null | PK
+  - codigo - number(22,0) not null | Auto inc.
   - url - varchar(600) not null
-  - datainicio - date not null
-  - datafim - date
+  - datainicio - datetime not null
+  - datafim - datetime
+
+# Funcionalidades
+- Iniciar download
+  - Realiza o download a partir do link informado.
+- Exibir mennsagem
+  - Exibe uma mensagem com o progresso total do download até o momento, em percentual.
+- Parar download
+  - Interrompe o download, apenas.
+- Exibir histórico de downloads
+  - Abre uma nova janela com uma lista onde exibe todo o histórico de logs de download armazenados.
+
+# Preview
+![image](https://user-images.githubusercontent.com/33349637/163701353-9f2a2a8f-5ce5-4fc0-a2c7-b36d2a91c2ff.png)
