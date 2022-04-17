@@ -11,3 +11,6 @@ Essa aplicação realiza o download de arquivos a partir de um link utilizando o
   - url - varchar(600) not null
   - datainicio - datetime not null
   - datafim - datetime
+
+# Preview
+![image](https://user-images.githubusercontent.com/33349637/163701353-9f2a2a8f-5ce5-4fc0-a2c7-b36d2a91c2ff.png)
