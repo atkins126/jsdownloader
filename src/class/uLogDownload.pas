@@ -16,6 +16,7 @@ type
     FDataInicio: TDateTime;
     FDataFim: TDateTime;
     FLogDownloadList: TObjectList<TLogDownload>;
+    procedure validate;
   public
     property Codigo: integer read FCodigo write FCodigo;
     property Url: string read FUrl write FUrl;
@@ -34,12 +35,25 @@ uses
 
 { TLogDownload }
 
+procedure TLogDownload.validate;
+begin
+  if FDataInicio <= 0 then
+  begin
+    raise Exception.Create('A data de início do download não foi informada.');
+  end;
+  if URL = '' then
+  begin
+    raise Exception.Create('A URL de download não foi informada.');
+  end;
+end;
+
 procedure TLogDownload.insert;
 var
   persistence: TLogDownloadPersistence;
 begin
   persistence := TLogDownloadPersistence.Create;
   try
+    Self.validate;
     persistence.insert(Self);
   finally
     persistence.Free;
@@ -52,6 +66,7 @@ var
 begin
   persistence := TLogDownloadPersistence.Create;
   try
+    Self.validate;
     persistence.update(Self);
   finally
     persistence.Free;

@@ -100,6 +100,15 @@ end;
 
 procedure TfrmMain.btnIniciarDownloadClick(Sender: TObject);
 begin
+  if Trim(edtDownloadLink.Text) = '' then
+  begin
+    ShowMessage('Informe um link para realizar o download.');
+    if edtDownloadLink.CanFocus then
+    begin
+      edtDownloadLink.SetFocus;
+    end;
+    Exit;
+  end;
   FTask := TTask.Create(Self.iniciarDownload);
   FTask.Start;
 end;
