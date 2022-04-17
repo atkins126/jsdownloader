@@ -7,7 +7,7 @@ Essa aplicação realiza o download de arquivos a partir de um link utilizando o
 # Estrutura do banco SQLite
 - Tabela - LOGDOWNLOAD
 - Campos 
-  - codigo - number(22,0) not null | PK
+  - codigo - number(22,0) not null | Auto inc.
   - url - varchar(600) not null
-  - datainicio - date not null
-  - datafim - date
+  - datainicio - datetime not null
+  - datafim - datetime
