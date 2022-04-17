@@ -1,6 +1,6 @@
-# JSDownloader | Download de arquivos com Delphi + Multithread + SQLite
+# JSDownloader | Download de arquivos com Delphi 10.4 + Multithread + SQLite3
 
-Olá, seja bem-vindo ao meu projeto Delphi.
+Olá, seja bem-vindo ao meu projeto em Delphi 10.4.
 
 Essa aplicação realiza o download de arquivos a partir de um link utilizando o sistema de Multithread nativo do Delphi combinado com o design pattern de Observer para receber os callbaks e armazenar o histórico de downloads em um banco de dados SQLite.
 
