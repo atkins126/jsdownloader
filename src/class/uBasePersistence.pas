@@ -63,14 +63,14 @@ begin
   try
     Result := 0;
     query.SQL.Clear;
-    query.SQL.Add('SELECT last_insert_rowid() as codigo');
+    query.SQL.Add('SELECT last_insert_rowid() as id');
       // Executa o comando SQL
     query.OpenOrExecute;
     if query.RecordCount <= 0 then
     begin
       Exit;
     end;
-    Result := query.FieldByName('codigo').AsInteger;
+    Result := query.FieldByName('id').AsInteger;
   except
     on E: Exception do
       raise Exception.Create('Ocorreu um erro ao tentar buscar o último código.' + sLineBreak + e.Message);

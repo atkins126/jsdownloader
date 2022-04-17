@@ -3,8 +3,9 @@ unit uFrmLogDownload;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, System.Generics.Collections;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.ComCtrls, System.Generics.Collections;
 
 type
   TfrmLogDownload = class(TForm)
@@ -19,7 +20,8 @@ var
 
 implementation
 
-uses uLogDownload;
+uses
+  uLogDownload;
 
 {$R *.dfm}
 
@@ -34,7 +36,7 @@ begin
   logDownloadList := logDownload.getAll;
   try
     lvLogDownload.Clear;
-    for I := 0 to logDownloadList.Count -1 do
+    for I := 0 to logDownloadList.Count - 1 do
     begin
       logItem := lvLogDownload.Items.Add;
       logItem.Caption := logDownloadList[I].Codigo.ToString;
@@ -52,3 +54,4 @@ begin
 end;
 
 end.
+

@@ -13,12 +13,10 @@ uses
 type
   TSQLiteConnection = class(TFDConnection)
   private
-    { private declarations }
     FSQLiteDriverLink: TFDPhysSQLiteDriverLink;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-
     class function getConnection: TFDConnection; static;
   end;
 

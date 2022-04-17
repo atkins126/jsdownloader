@@ -4,10 +4,10 @@ interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, Vcl.Controls,
-  uBasePersistence, uLogDownload, FireDAC.Stan.Intf,
-  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
-  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
-  Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+  uBasePersistence, uLogDownload, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, Data.DB,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client;
 
 type
   TLogDownloadPersistence = class(TBasePersistence)
@@ -110,7 +110,7 @@ begin
     end;
   except
     on E: Exception do
-      raise Exception.Create('Ocorreu um erro ao tentar atualizar um log de download.' + sLineBreak + e.Message);
+      raise Exception.Create('Ocorreu um erro ao tentar carregar todos os logs de download.' + sLineBreak + e.Message);
   end;
 end;
 

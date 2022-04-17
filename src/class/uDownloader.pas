@@ -18,7 +18,7 @@ type
 
   IObserver = interface
     ['{D1B7A184-0BB1-452F-84B2-9717BA70957F}']
-    procedure atualizaPrograsso(statusDownload: TStatusDownload);
+    procedure progressCallback(statusDownload: TStatusDownload);
   end;
 
   ISubject = interface
@@ -43,6 +43,7 @@ type
     function ExtractUrlFileName(url: string): string;
     procedure initialize;
     procedure sendLog;
+    procedure disconnect;
   public
     constructor Create;
     destructor Destroy;
@@ -96,7 +97,7 @@ begin
   end;
   for observer in FObservers do
   begin
-    IObserver(observer).atualizaPrograsso(FStatusDownload);
+    IObserver(observer).progressCallback(FStatusDownload);
   end;
 end;
 
@@ -170,6 +171,14 @@ begin
   end;
 end;
 
+procedure TDownloader.disconnect;
+begin
+  FIdHttp.Disconnect;
+  FIdHttp.OnWorkBegin := nil;
+  FIdHttp.OnWork := nil;
+  FIdHttp.OnWorkEnd := nil;
+end;
+
 procedure TDownloader.IdHTTPWorkBegin(ASender: TObject; AWorkMode: TWorkMode; AWorkCountMax: Int64);
 begin
   FTamanhoArquivo := AWorkCountMax;
@@ -182,14 +191,10 @@ procedure TDownloader.IdHTTPWork(ASender: TObject; AWorkMode: TWorkMode; AWorkCo
 begin
   if FStopDownload then
   begin
-    FIdHttp.Disconnect;
     FStatusDownload.DownloadIniciado := false;
-    FIdHttp.OnWorkBegin := nil;
-    FIdHttp.OnWork := nil;
-    FIdHttp.OnWorkEnd := nil;
+    self.disconnect;
   end
-  else
-  if (AWorkCount <> 0) and (FTamanhoArquivo <> 0) then
+  else if (AWorkCount <> 0) and (FTamanhoArquivo <> 0) then
   begin
     FStatusDownload.PercentualDownload := Trunc((AWorkCount / FTamanhoArquivo) * 100);
   end;

@@ -12,6 +12,7 @@ object frmMain: TfrmMain
   Font.Style = []
   Font.Quality = fqClearType
   OldCreateOrder = False
+  Position = poScreenCenter
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -32,28 +33,28 @@ object frmMain: TfrmMain
     TabOrder = 0
   end
   object btnIniciarDownload: TButton
-    Left = 152
-    Top = 127
-    Width = 212
-    Height = 25
+    Left = 164
+    Top = 118
+    Width = 189
+    Height = 29
     Caption = 'Iniciar Download'
     TabOrder = 1
     OnClick = btnIniciarDownloadClick
   end
   object btnExibirMensagem: TButton
-    Left = 152
-    Top = 167
-    Width = 212
-    Height = 25
+    Left = 164
+    Top = 158
+    Width = 189
+    Height = 29
     Caption = 'Exibir mensagem'
     TabOrder = 2
     OnClick = btnExibirMensagemClick
   end
   object btnPararDownload: TButton
-    Left = 152
-    Top = 206
-    Width = 212
-    Height = 25
+    Left = 164
+    Top = 197
+    Width = 189
+    Height = 29
     Caption = 'Parar download'
     TabOrder = 3
     OnClick = btnPararDownloadClick
@@ -86,12 +87,21 @@ object frmMain: TfrmMain
     end
   end
   object btnHistoricoDownloads: TButton
-    Left = 152
-    Top = 246
-    Width = 212
-    Height = 25
+    Left = 164
+    Top = 237
+    Width = 189
+    Height = 29
     Caption = 'Exibir hist'#243'rico de downloads'
     TabOrder = 5
     OnClick = btnHistoricoDownloadsClick
+  end
+  object pbDownload: TProgressBar
+    Left = 0
+    Top = 288
+    Width = 514
+    Height = 11
+    Align = alBottom
+    Smooth = True
+    TabOrder = 6
   end
 end
