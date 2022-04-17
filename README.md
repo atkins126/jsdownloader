@@ -23,4 +23,4 @@ Essa aplicação realiza o download de arquivos a partir de um link utilizando o
   - Abre uma nova janela com uma lista onde exibe todo o histórico de logs de download armazenados.
 
 # Preview
-![image](https://user-images.githubusercontent.com/33349637/163701353-9f2a2a8f-5ce5-4fc0-a2c7-b36d2a91c2ff.png)
+![image](https://user-images.githubusercontent.com/33349637/163734409-cf17714f-03a0-4dbb-a7d7-226a070a6fe1.png)
